@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <title>错误视频列表</title>
+    <style>
+        body { font-family: sans-serif; background: #fafafa; padding: 20px; }
+        .video-list { display: flex; flex-wrap: wrap; gap: 15px; }
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            width: 220px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        video { width: 100%; border-radius: 5px; }
+        p { text-align: center; margin-top: 5px; word-break: break-all; }
+    </style>
+</head>
+<body>
+<h1>错误视频</h1>
+<div class="video-list" id="videos"></div>
+
+<script>
+    fetch("/api/errors")
+        .then(r => r.json())
+        .then(res => {
+            const box = document.getElementById("videos");
+            const list = res.data || [];  // ✅ 改为正确字段
+            if (list.length === 0) {
+                box.innerHTML = "<p>暂无错误视频</p>";
+                return;
+            }
+
+            list.forEach(v => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+          <video src="${v.url}" controls></video>
+          <p>${v.name}</p>
+          <small>${v.time}</small>
+        `;
+                box.appendChild(card);
+            });
+        })
+        .catch(err => {
+            document.getElementById("videos").innerHTML =
+                "<p style='color:red;'>加载失败：" + err.message + "</p>";
+        });
+</script>
+</body>
+</html>
