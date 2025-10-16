@@ -330,7 +330,7 @@ func startWebServer() {
 		c.File(full)
 	})
 
-	log.Println("🌐 Gin 服务启动: http://localhost:10189")
+	log.Println("🌐 服务启动: http://localhost:10189")
 	router.Run(":10189")
 }
 
