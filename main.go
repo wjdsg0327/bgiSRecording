@@ -26,9 +26,9 @@ import (
 var embeddedFiles embed.FS
 
 type Config struct {
-	ServerAddr string   `yaml:"serverAddr"`
-	FileName   string   `yaml:"fileName"`
-	Keywords   []string `yaml:"keywords"`
+	ServerAddr string `yaml:"serverAddr"`
+	//FileName   string   `yaml:"fileName"`
+	Keywords []string `yaml:"keywords"`
 }
 
 var config Config
@@ -73,7 +73,9 @@ func main() {
 
 	// 启动 WebSocket 日志监听
 	go func() {
-		u := url.URL{Scheme: "ws", Host: config.ServerAddr, Path: "/ws/" + config.FileName}
+		date := time.Now().Format("20060102")
+		logName := fmt.Sprintf("better-genshin-impact%s.log", date)
+		u := url.URL{Scheme: "ws", Host: config.ServerAddr, Path: "/ws/" + logName}
 		wsBgiLog(u.String())
 	}()
 
